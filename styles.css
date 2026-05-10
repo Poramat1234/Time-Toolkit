@@ -706,17 +706,21 @@ input[type="text"]:focus,
   margin: 0 auto;
   flex: 1;
   overflow-y: auto;
+  padding-top: 56px;
+  container-type: inline-size;
 }
 .al-now {
   font-family: 'Orbitron', monospace;
   font-weight: 700;
-  font-size: 6vw;
+  font-size: min(var(--al-size, 6vw), 16cqw);
   text-align: center;
   color: var(--text);
   letter-spacing: 0.04em;
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1;
   user-select: none;
+  white-space: nowrap;
+  max-width: 100%;
 }
 .al-list-head {
   display: flex;

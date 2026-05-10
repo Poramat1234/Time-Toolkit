@@ -183,9 +183,10 @@ window.mountAlarm = function mountAlarm(root) {
     $('alVolume').value  = settings.volume;
   }
   function applyDisplay() {
+    const content = root.querySelector('.al-content');
     nowEl.style.fontFamily = `'${settings.font}', monospace`;
     nowEl.style.color = settings.color;
-    nowEl.style.fontSize = `${settings.size}vw`;
+    content.style.setProperty('--al-size', `${settings.size}vw`);
     nowEl.style.letterSpacing = `${settings.spacing}em`;
   }
   function applySettings() {
