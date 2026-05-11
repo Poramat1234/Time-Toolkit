@@ -1,4 +1,4 @@
-const TM_STORAGE_KEY = 'timeToolkit.timer.settings';
+const TM_STORAGE_KEY = 'mytimes.timer.settings';
 
 const TM_DEFAULTS = {
   wallpaper: { kind: 'preset', value: 'ember' },

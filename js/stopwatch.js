@@ -1,4 +1,4 @@
-const SW_STORAGE_KEY = 'timeToolkit.stopwatch.settings';
+const SW_STORAGE_KEY = 'mytimes.stopwatch.settings';
 
 const SW_DEFAULTS = {
   wallpaper: { kind: 'preset', value: 'mono' },

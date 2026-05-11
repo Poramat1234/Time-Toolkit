@@ -1,11 +1,11 @@
-# Time Toolkit — project map
+# Mytimes — project map
 
 A single-page web app with 6 time-related views. Plain HTML/CSS/JS, no build step, no dependencies. Open `index.html` directly in a browser.
 
 ## File layout
 
 ```
-time-toolkit/
+mytimes/
 ├── index.html          App shell: sidebar + main mount point + script tags (load order matters: shared.js first)
 ├── styles.css          All styles. Sections marked "----- <view> view -----"
 ├── app.js              View router: registers mount functions, switches views via sidebar clicks
@@ -93,14 +93,14 @@ Use these tokens. Don't hard-code colors / shadows / easing in view CSS.
 
 | Key | Owner | Contents |
 |---|---|---|
-| `timeToolkit.clock.settings`     | clock     | wallpaper, font, color, size, glow, hour24, showSeconds, showDate, spacing |
-| `timeToolkit.stopwatch.settings` | stopwatch | wallpaper, font, color, size, spacing |
-| `timeToolkit.timer.settings`     | timer     | wallpaper, font, color, size, spacing, volume |
-| `timeToolkit.alarm.settings`     | alarm     | wallpaper, font, color, size, spacing, volume |
-| `timeToolkit.alarm.alarms`       | alarm     | Array of `{id, time, label, days, enabled, lastFiredKey}` |
-| `timeToolkit.focus.settings`     | focus     | + studyMin, shortBreakMin, longBreakMin, cyclesPerSet, autoStart |
-| `timeToolkit.world.settings`     | world     | + hour24, showSeconds |
-| `timeToolkit.world.cities`       | world     | Array of `{name, tz}` (IANA timezone IDs) |
+| `mytimes.clock.settings`     | clock     | wallpaper, font, color, size, glow, hour24, showSeconds, showDate, spacing |
+| `mytimes.stopwatch.settings` | stopwatch | wallpaper, font, color, size, spacing |
+| `mytimes.timer.settings`     | timer     | wallpaper, font, color, size, spacing, volume |
+| `mytimes.alarm.settings`     | alarm     | wallpaper, font, color, size, spacing, volume |
+| `mytimes.alarm.alarms`       | alarm     | Array of `{id, time, label, days, enabled, lastFiredKey}` |
+| `mytimes.focus.settings`     | focus     | + studyMin, shortBreakMin, longBreakMin, cyclesPerSet, autoStart |
+| `mytimes.world.settings`     | world     | + hour24, showSeconds |
+| `mytimes.world.cities`       | world     | Array of `{name, tz}` (IANA timezone IDs) |
 
 ## Gotchas
 

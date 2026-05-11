@@ -1,5 +1,5 @@
-const WC_STORAGE_KEY = 'timeToolkit.world.settings';
-const WC_CITIES_KEY = 'timeToolkit.world.cities';
+const WC_STORAGE_KEY = 'mytimes.world.settings';
+const WC_CITIES_KEY = 'mytimes.world.cities';
 
 const CITY_LIST = [
   { name: 'Bangkok',      tz: 'Asia/Bangkok' },

@@ -1,5 +1,5 @@
-const AL_STORAGE_KEY = 'timeToolkit.alarm.settings';
-const AL_ALARMS_KEY = 'timeToolkit.alarm.alarms';
+const AL_STORAGE_KEY = 'mytimes.alarm.settings';
+const AL_ALARMS_KEY = 'mytimes.alarm.alarms';
 
 const AL_DEFAULTS = {
   wallpaper: { kind: 'preset', value: 'aurora' },

@@ -1,4 +1,4 @@
-const FC_STORAGE_KEY = 'timeToolkit.focus.settings';
+const FC_STORAGE_KEY = 'mytimes.focus.settings';
 
 const FC_DEFAULTS = {
   wallpaper: { kind: 'preset', value: 'forest' },

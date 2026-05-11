@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'timeToolkit.clock.settings';
+const STORAGE_KEY = 'mytimes.clock.settings';
 
 const DEFAULTS = {
   wallpaper: { kind: 'preset', value: 'midnight' },
