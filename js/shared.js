@@ -19,6 +19,12 @@ window.TT = (() => {
     { id: 'Cinzel',               label: '12:34' },
     { id: 'Bebas Neue',           label: '12:34' },
     { id: 'Playfair Display',     label: '12:34' },
+    { id: 'Rubik Glitch',          label: '12:34' },
+    { id: 'Quantico',              label: '12:34' },
+    { id: 'Silkscreen',            label: '12:34' },
+    { id: 'Jersey 25',             label: '12:34' },
+    { id: 'Micro 5',               label: '12:34' },
+    { id: 'Manufacturing Consent', label: '12:34' },
   ];
 
   let _audioCtx = null;
