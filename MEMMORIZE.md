@@ -49,12 +49,45 @@ TT.beep(volume, freq=880, dur=0.4)          // Plays a single sine-wave tone via
 
 When adding a new view, use these — don't duplicate. When adding a new wallpaper preset or font, edit `shared.js` once and all views pick it up.
 
+## CSS design tokens (in `:root`)
+
+```
+Colors:
+  --bg, --bg-2                   Page backgrounds (deepest, slightly elevated)
+  --panel, --panel-2, --panel-3  Surface tiers (low → high elevation)
+  --border, --border-strong      Border tiers (default vs hover/active)
+  --text, --muted                Foreground tiers
+  --accent, --accent-bright      Brand color (default + hover state)
+  --accent-soft                  Translucent accent for tinted backgrounds + focus rings
+  --danger, --success            Semantic colors
+
+Elevation:
+  --shadow-sm                    Resting shadow on buttons/cards
+  --shadow-md                    Hover shadow
+  --shadow-lg                    Drawer + modal-like surfaces
+
+Motion:
+  --ease                         cubic-bezier(0.22, 0.61, 0.36, 1) — use for ALL transitions
+
+Radii:
+  --r-sm (6px), --r (10px), --r-lg (14px)
+```
+
+Use these tokens. Don't hard-code colors / shadows / easing in view CSS.
+
 ## CSS conventions
 
 - View root classes are prefixed by view: `.clock-view`, `.sw-view`, `.tm-view`, `.al-view`, `.fc-view`, `.wc-view`
-- Generic shared classes (used across views): `.wallpaper`, `.fab-row`, `.fab`, `.drawer`, `.drawer-head`, `.drawer-body`, `.section`, `.row`, `.wp-grid`, `.wp-tile`, `.font-grid`, `.font-tile`, `.switch`, `.btn`, `.sw-btn`, `.sw-primary`, `.sw-secondary`, `.sw-stop`
+- Generic shared classes (used across views): `.wallpaper`, `.fab-row`, `.fab`, `.drawer`, `.drawer-head`, `.drawer-body`, `.section`, `.row`, `.wp-grid`, `.wp-tile`, `.font-grid`, `.font-tile`, `.switch`, `.btn`
+- **Button system:** every action button uses `.sw-btn` + a variant — `.sw-primary` (accent fill), `.sw-secondary` (default panel), `.sw-stop` (danger fill, usually combined with `.sw-primary`). Yes, the prefix is `sw-` for legacy reasons (started in stopwatch); applies to all views now.
 - Wallpaper preset classes: `.wp-midnight`, `.wp-sunset`, `.wp-ocean`, `.wp-forest`, `.wp-aurora`, `.wp-mono`, `.wp-lavender`, `.wp-ember`
 - Fullscreen mode: `body.fullscreen-mode` hides sidebar (set by `TT.setupFullscreen`)
+- **Sidebar nav active state:** uses `::before` pseudo-element animated `scaleY` for the accent left-bar. Don't restructure `.nav-item` markup without preserving this.
+- **Brand text** in sidebar uses `background-clip: text` + transparent fill for the white→accent gradient.
+- **Custom scrollbars** are set globally via `::-webkit-scrollbar` rules. Firefox falls back to default; that's fine.
+- **Focus rings** for inputs: `box-shadow: 0 0 0 3px var(--accent-soft)` — applied via global selector for `input[type="number"]:focus`, `input[type="text"]:focus`, and `select:focus`.
+- **Drawer width** is 360px, slides with `--ease` over 320ms. If you change width, also check that long font names in the font picker still wrap nicely.
+- **Range slider thumbs** are styled (custom round accent thumbs). The styles are duplicated for `-webkit-slider-thumb` and `-moz-range-thumb` — both required.
 
 ## localStorage keys
 
@@ -74,8 +107,27 @@ When adding a new view, use these — don't duplicate. When adding a new wallpap
 - **AudioContext requires a user gesture.** First `TT.beep()` only succeeds after the user has clicked something on the page. If you walk away before clicking anything, alarm sounds may fail silently.
 - **`tabular-nums` doesn't fix every font.** Some fonts (Audiowide, Bebas Neue) lack tabular figures. The Clock view ended up using natural typography + a user-controlled letter-spacing slider after several iterations of trying to lock digit positions.
 - **World Clock card sizing.** Time font scales as `min(--wc-size, 18cqw)` (container query) — bumping `--wc-size` also enlarges card min-width via `grid-template-columns` calc. Touching one without the other breaks layout.
+- **Alarm time sizing — non-obvious pattern.** `.al-content` is a `container-type: inline-size` container. The font size on `.al-now` is `min(var(--al-size, 6vw), 16cqw)`, and `--al-size` is set as a CSS variable on `.al-content` (NOT as inline `font-size` on `.al-now`). This caps the time at the container width even when the user cranks the size slider. If you set `nowEl.style.fontSize` directly, you'll bypass the cap and the time will overflow the frame.
+- **Alarm top padding.** `.al-content` has `padding-top: 56px` to clear the FAB row in the top-right. Without it, the time slides under the buttons at large sizes.
 - **Focus phase transitions** call `nextPhase()` from inside the rAF loop. If you change the loop, make sure rAF is cancelled before `nextPhase()` reschedules.
 - **Custom wallpaper images** are stored as base64 data URLs in localStorage (Clock only). Capped at 2 MB to avoid blowing the localStorage quota.
+
+## Responsive behavior
+
+All responsive rules live in **one section at the bottom of `styles.css`** under "Responsive — Tablet & Mobile". Three breakpoints:
+
+| Width | Layout |
+|---|---|
+| **>1024px** (desktop, iPad landscape) | Original sidebar layout, unchanged |
+| **641–1024px** (iPad portrait, small tablet) | Sidebar narrows to 190px; drawer clamped to `min(360px, 86vw)`; view padding 32→24px |
+| **≤640px** (phone) | Sidebar becomes a **bottom tab bar** (CSS-only via grid + flex direction swap on `.sidebar` / `.nav`); drawer is full-width; clock/stopwatch/timer/focus displays use `clamp(px, vw, vh)` so they stay readable on phones and don't overflow in landscape; wallpaper grid drops to 3 cols; `100dvh` on `.app` to avoid mobile Safari URL-bar jumps |
+| **≤900w × ≤480h landscape** | Extra-tight vertical spacing pass for phone-landscape |
+
+**Important when editing views for mobile:**
+- The active-state left-bar indicator (`.nav-item::before`) is rotated to a **top-bar** on phone. Don't restructure `.nav-item` markup or you'll break it.
+- On phone, the sidebar's `display: none` is still used by `body.fullscreen-mode`; that hides the bottom tab bar too — no extra rule needed.
+- View JS never measures viewport; layout is entirely CSS-driven. Keep it that way.
+- When adding a new view: also add a mobile-padding override under the `@media (max-width: 640px)` block if the default 32px padding is too wide for phone.
 
 ## Adding a new view
 
@@ -84,5 +136,6 @@ When adding a new view, use these — don't duplicate. When adding a new wallpap
 3. Add `<script src="js/<view>.js"></script>` to `index.html` (after shared.js, before app.js)
 4. Add a `<button class="nav-item" data-view="<view>">` to the sidebar in `index.html`
 5. Add the view to the `views` registry in `app.js`
-6. Add `.<prefix>-view` styles in `styles.css`
+6. Add `.<prefix>-view` styles in `styles.css`. Use the design tokens (`--ease`, `--r`, `--shadow-*`, etc.)
 7. Use `TT.*` for wallpaper/fonts/fullscreen/beep — don't duplicate
+8. Use the `.sw-btn` button system for action buttons
