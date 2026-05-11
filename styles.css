@@ -52,7 +52,8 @@ html, body {
 .app {
   display: grid;
   grid-template-columns: var(--sidebar-w) 1fr;
-  height: 100vh;
+  height: 100vh;   /* fallback for older browsers */
+  height: 100svh;  /* small viewport — excludes mobile browser URL bar */
 }
 
 /* Sidebar */
@@ -1154,8 +1155,7 @@ input[type="text"]:focus,
   .app {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr auto;
-    height: 100vh;     /* fallback */
-    height: 100dvh;    /* avoids mobile Safari URL-bar jumps */
+    /* height: 100svh inherited from base .app rule */
   }
   /* Force order: main on top (row 1), sidebar/tab-bar on bottom (row 2).
      Without this, source-order puts sidebar in row 1 and main gets squashed. */
@@ -1168,6 +1168,7 @@ input[type="text"]:focus,
     align-items: stretch;
     gap: 0;
     padding: 6px 8px;
+    padding-bottom: calc(6px + env(safe-area-inset-bottom));
     border-right: none;
     border-top: 1px solid var(--border);
     background: linear-gradient(0deg, var(--panel) 0%, var(--bg-2) 100%);
